@@ -7,6 +7,7 @@ function NewsPage() {
   const [news, setNews] = useState([]);
   const [quiz, setQuiz] = useState(null);
   const [score, setScore] = useState(0);
+  const [showQuiz, setShowQuiz] = useState(false); // New state to control quiz visibility
 
   useEffect(() => {
     // Placeholder news data
@@ -39,25 +40,33 @@ function NewsPage() {
     }
   };
 
-  return (
+  const handleContinueClick = () => {
+    setShowQuiz(true); // Show the quiz when button is clicked
+  };
 
+  return (
     <div className="App">
       <header className="App-header">
         <h1>News Quiz</h1>
         <NewsList news={news} />
-        <h2>Feel like you're ready?</h2>
-        <button>Continue to quiz!</button>
-        <div>
-    </div>
-        {quiz && (
-          <Quiz
-            question={quiz.question}
-            options={quiz.options}
-            correctAnswer={quiz.correctAnswer}
-            onAnswer={handleAnswer}
-          />
+        
+        {!showQuiz ? ( // Only show this section if quiz is not visible
+          <>
+            <h2>Feel like you're ready?</h2>
+            <button onClick={handleContinueClick}>Continue to quiz!</button>
+          </>
+        ) : (
+          quiz && ( // Only show quiz if it's loaded and showQuiz is true
+            <Quiz
+              question={quiz.question}
+              options={quiz.options}
+              correctAnswer={quiz.correctAnswer}
+              onAnswer={handleAnswer}
+            />
+          )
         )}
-        <p>Score: {score}</p>
+        
+        {showQuiz && <p>Score: {score}</p>} {/* Only show score after quiz starts */}
       </header>
     </div>
   );
