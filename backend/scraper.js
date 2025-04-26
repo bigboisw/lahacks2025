@@ -1,66 +1,64 @@
 const playwright = require('playwright');
+const fs = require('fs');
 
 (async () => {
   const browser = await playwright.chromium.launch({ headless: false });
   const context = await browser.newContext();
   const page = await context.newPage();
 
-  try {
-    // Go to the NBC News website
-    await page.goto('https://www.nbcnews.com/');
+  // storage for all scraped articles
+  const allArticles = [];
 
-    // Wait for the news article containers to load. Adjust selector if needed.
+  try {
+    await page.goto('https://www.nbcnews.com/');
     await page.waitForSelector('.container-side__text-content.no-author-timestamp', { timeout: 10000 });
 
-    // Extract the links of the news articles
     const articleLinks = await page.evaluate(() => {
       const links = [];
-      const storyElements = document.querySelectorAll('.container-side__text-content.no-author-timestamp');
-      storyElements.forEach((storyElement) => {
-        const linkElement = storyElement.querySelector('h2.storyline__headline a');
-        if (linkElement) {
-          links.push(linkElement.getAttribute('href'));
-        }
-      });
+      document
+        .querySelectorAll('.container-side__text-content.no-author-timestamp')
+        .forEach(storyEl => {
+          const a = storyEl.querySelector('h2.storyline__headline a');
+          if (a) links.push(a.href);
+        });
       return links;
     });
 
-    console.log('Found the following article links:', articleLinks);
+    console.log(`Found ${articleLinks.length} article links.`);
 
-    // Loop through each article link and extract the title and paragraphs
-    for (const articleUrl of articleLinks) {
+    for (const url of articleLinks) {
       try {
-        console.log(`\nNavigating to: ${articleUrl}`);
-        await page.goto(articleUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
-
-        // Wait for the title and at least one paragraph to load
+        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
         await page.waitForSelector('h1', { timeout: 10000 });
         await page.waitForSelector('.article-body__content p', { timeout: 10000 });
 
         const articleData = await page.evaluate(() => {
-          const titleElement = document.querySelector('h1');
-          const paragraphElements = document.querySelectorAll('.article-body__content p');
-
-          const title = titleElement ? titleElement.textContent.trim() : 'No Title Found';
-          const paragraphs = Array.from(paragraphElements).map(p => p.textContent.trim());
-
+          const title = document.querySelector('h1')?.textContent.trim() ?? '';
+          const paragraphs = Array.from(
+            document.querySelectorAll('.article-body__content p')
+          ).map(p => p.textContent.trim());
           return { title, paragraphs };
         });
 
-        console.log('Article Title:', articleData.title);
-        console.log('Article Paragraphs:');
-        articleData.paragraphs.forEach((paragraph, index) => {
-          console.log(`${index + 1}: ${paragraph}`);
+        allArticles.push({
+          url,
+          ...articleData
         });
-
-      } catch (error) {
-        console.error(`Error processing article at ${articleUrl}:`, error);
+        console.log(`Scraped: ${articleData.title}`);
+      } catch (err) {
+        console.error(`Error scraping ${url}:`, err.message);
       }
     }
-
-  } catch (error) {
-    console.error('An error occurred:', error);
+  } catch (err) {
+    console.error('Fatal error:', err);
   } finally {
     await browser.close();
+    // write to JSON file
+    fs.writeFileSync(
+      'articles.json',
+      JSON.stringify(allArticles, null, 2),
+      'utf-8'
+    );
+    console.log(`Wrote ${allArticles.length} articles to articles.json`);
   }
 })();
