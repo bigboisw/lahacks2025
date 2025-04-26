@@ -1,3 +1,111 @@
-.Login {
-    text-align: center;
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: 'Open Sans', sans-serif;
+  background-color: #EAF2F8;
+}
+
+.login-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #EAF2F8;
+}
+
+.login-box {
+  background: #FFFFFF;
+  padding: 3rem 2.5rem;
+  border-radius: 32px; /* More rounded */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  width: 380px;
+  text-align: center;
+}
+
+.login-title {
+  margin-bottom: 1.8rem;
+  color: #333333;
+  font-family: 'Roboto Slab', serif;
+  font-size: 2rem;
+  letter-spacing: 1px;
+}
+
+.login-icon {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 1.5rem;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-input {
+  width: 90%;
+  padding: 0.9rem 1.2rem;
+  margin-bottom: 1.2rem;
+  border: 1px solid #DDD;
+  border-radius: 24px; /* More rounded inputs */
+  font-size: 1rem;
+  background: #FAFAFA;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-input:hover {
+  border-color: #CCC;
+}
+
+.login-input:focus {
+  border-color: #2C3E50;
+  box-shadow: 0 0 0 2px rgba(44, 62, 80, 0.15), inset 0 1px 3px rgba(0, 0, 0, 0.08);
+  outline: none;
+}
+
+.login-input::placeholder {
+  color: #AAAAAA;
+}
+
+.login-button {
+  width: 100%;
+  padding: 0.9rem;
+  border: none;
+  border-radius: 24px; /* More rounded button */
+  background-color: #2C3E50;
+  color: #FFFFFF;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #1A2B38;
+}
+
+.login-message {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #E74C3C;
+}
+
+.login-signup {
+  display: block;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #2C3E50;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login-signup:hover {
+  text-decoration: underline;
 }
