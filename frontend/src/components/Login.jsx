@@ -15,8 +15,8 @@ function Login() {
     const payload = mode === 'login'
       ? {username, password}
       : {username, password, classroom}
-
-    const res = await fetch('http://localhost:3000/login', {
+    console.log(endpoint)
+    const res = await fetch(`http://localhost:5173${endpoint}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)

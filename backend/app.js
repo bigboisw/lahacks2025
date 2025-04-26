@@ -8,7 +8,7 @@ import { connectDB } from './db.js'
 const app = express();
 const apiKey = process.env.GOOGLE_API_KEY;
 
-app.use(cors({ origin: 'http://localhost:5173' }));
+app.use(cors({ origin: 'http://localhost:3001' }));
 app.use(express.json());
 
 await connectDB()
@@ -110,4 +110,4 @@ app.post('/gemini', async (req, res) => {
 
 
 // Start server
-app.listen(3000, () => console.log('Server running on http://localhost:3000'));
+app.listen(5173, () => console.log('Server running on http://localhost:5173'));
