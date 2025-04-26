@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import cors from 'cors';
 
 const app = express();
+const apiKey = process.env.GOOGLE_API_KEY;
 
 app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(express.json());
@@ -69,6 +70,32 @@ app.get('/leaderboard/:classroom', async (req, res) => {
     res.status(500).send('Error retrieving leaderboard');
   }
 });
+
+app.post('/gemini', async (req, res) => {
+  try {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [
+          {
+            parts: [{ text: "Explain how AI works in a few words" }]
+          }
+        ]
+      })
+    });
+
+    const data = await response.json();
+    const aiText = data.candidates[0].content.parts[0].text;
+
+    console.log(aiText);
+    res.json({ text: aiText });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: "Something went wrong." });
+  }
+});
+
 
 // Start server
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
