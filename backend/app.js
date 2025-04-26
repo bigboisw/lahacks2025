@@ -8,7 +8,7 @@ import { createUser } from './createUser.js';  // Import the createUser function
 const app = express();
 const apiKey = process.env.GOOGLE_API_KEY;
 
-app.use(cors({ origin: 'http://localhost:5173' }));
+app.use(cors({ origin: 'http://localhost:3001' }));
 app.use(express.json());
 
 // Connect to the database
