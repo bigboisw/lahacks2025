@@ -1,20 +1,31 @@
 import React from 'react';
+import './Quiz.css';
 
 const Quiz = ({ question, options, correctAnswer, onAnswer }) => {
-  const handleAnswer = (answer) => {
-    onAnswer(answer === correctAnswer);
+  const [selectedOption, setSelectedOption] = React.useState(null);
+
+  const handleAnswer = (option) => {
+    setSelectedOption(option);
+    onAnswer(option === correctAnswer);
   };
 
   return (
-    <div>
-      <h2>{question}</h2>
-      <ul>
+    <div className="quiz-container">
+      <h2 className="quiz-question">{question}</h2>
+      <div className="options-container">
         {options.map((option, index) => (
-          <li key={index} onClick={() => handleAnswer(option)}>
-            {option}
-          </li>
+          <div 
+            key={index}
+            className={`option ${selectedOption === option ? 'selected' : ''}`}
+            onClick={() => handleAnswer(option)}
+          >
+            <span className="option-letter">
+              {String.fromCharCode(65 + index)} {/* A, B, C, D */}
+            </span>
+            <span className="option-text">{option}</span>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
