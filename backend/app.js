@@ -17,7 +17,7 @@ const UserSchema = new mongoose.Schema({
   username: { type: String, unique: true, required: true },
   passwordHash: { type: String, required: true },
   streak: { type: Number, default: 0 },
-  classroom: { type: String, required: true }    // new: classroom field
+  classroom: { type: String, required: true }
 });
 
 UserSchema.methods.isValidPassword = function(password) {
@@ -53,6 +53,20 @@ app.post('/login', async (req, res) => {
     res.send('Login successful');
   } else {
     res.status(401).send('Invalid credentials');
+  }
+});
+
+// leaderboard
+app.get('/leaderboard/:classroom', async (req, res) => {
+  const { classroom } = req.params;
+  try {
+    const users = await User.find({ classroom })
+      .sort({ streak: -1 })
+      .select('username streak')
+      .limit(10);
+    res.json(users);
+  } catch (err) {
+    res.status(500).send('Error retrieving leaderboard');
   }
 });
 
