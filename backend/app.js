@@ -1,11 +1,11 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+import express from 'express';
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
+import cors from 'cors';
+
 const app = express();
-const cors = require('cors');
 
 app.use(cors({ origin: 'http://localhost:5173' }));
-app.use(cors());
 app.use(express.json());
 
 mongoose.connect('mongodb://localhost:27017/my_auth_app')
@@ -70,4 +70,5 @@ app.get('/leaderboard/:classroom', async (req, res) => {
   }
 });
 
+// Start server
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
