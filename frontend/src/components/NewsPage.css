@@ -1,0 +1,30 @@
+.news-list {
+    margin-top: 20px;
+  }
+  
+  .news-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: left;
+  }
+  
+  .quiz {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+  }
+  
+  .quiz ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .quiz li {
+    margin-bottom: 5px;
+    cursor: pointer;
+  }
+  
+  .quiz li:hover {
+    background-color: #f0f0f0;
+  }
