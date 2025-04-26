@@ -16,6 +16,12 @@ function Login() {
 
     const text = await res.text()
     setMessage(text)
+
+    if (res.ok) {
+      console.log('Login successful!');
+    } else {
+      console.log('Login failed');
+    }
   }
 
   return (

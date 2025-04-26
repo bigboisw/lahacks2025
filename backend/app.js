@@ -1,11 +1,13 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+import express from 'express';
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
+import cors from 'cors';
+import 'dotenv/config'
+
 const app = express();
-const cors = require('cors');
+const apiKey = process.env.GOOGLE_API_KEY;
 
 app.use(cors({ origin: 'http://localhost:5173' }));
-app.use(cors());
 app.use(express.json());
 
 mongoose.connect('mongodb://localhost:27017/my_auth_app')
@@ -70,4 +72,43 @@ app.get('/leaderboard/:classroom', async (req, res) => {
   }
 });
 
+//gemini
+/*
+req format
+{
+  "prompt": "text"
+}
+*/
+app.post('/gemini', async (req, res) => {
+  try {
+    const { prompt } = req.body;
+    if (!prompt) {
+      return res.status(400).json({ error: "Prompt is required" });
+    }
+
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [
+          {
+            parts: [{ text: prompt }]
+          }
+        ]
+      })
+    });
+
+    const data = await response.json();
+    const aiText = data.candidates[0].content.parts[0].text;
+
+    console.log(aiText);
+    res.json({ text: aiText });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: "Something went wrong." });
+  }
+});
+
+
+// Start server
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
