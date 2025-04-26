@@ -1,9 +1,9 @@
 import express from 'express';
-import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
 import cors from 'cors';
-import 'dotenv/config'
-import { connectDB } from './db.js'
+import 'dotenv/config';
+import { connectDB } from './db.js';
+import User from './models/User.js';  // Import the User model
+import { createUser } from './createUser.js';  // Import the createUser function
 
 const app = express();
 const apiKey = process.env.GOOGLE_API_KEY;
@@ -11,103 +11,39 @@ const apiKey = process.env.GOOGLE_API_KEY;
 app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(express.json());
 
-await connectDB()
+// Connect to the database
+await connectDB();
 
-// schema
-const UserSchema = new mongoose.Schema({
-  username: { type: String, unique: true, required: true },
-  passwordHash: { type: String, required: true },
-  streak: { type: Number, default: 0 },
-  classroom: { type: String, required: true }
-});
-
-UserSchema.methods.isValidPassword = function(password) {
-  return bcrypt.compare(password, this.passwordHash);
-};
-
-const User = mongoose.model('User', UserSchema);
-
-// register route
+// Register route
 app.post('/register', async (req, res) => {
   const { username, password, classroom } = req.body;
 
+  // Validate required fields
   if (!username || !password || !classroom) {
-    return res.status(400).send('Missing required fields');
+    return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  const passwordHash = await bcrypt.hash(password, 10);
   try {
-    const user = new User({ username, passwordHash, classroom });
-    await user.save();
-    res.send('User registered');
+    // Call the createUser function to create a new user
+    await createUser(username, password, classroom);
+    res.status(201).json({ message: 'User registered successfully' });
   } catch (e) {
-    res.status(400).send('Username already exists');
+    // Catch errors like username already exists
+    res.status(400).json({ error: e.message });
   }
 });
 
-// login route
+// Login route
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
   const user = await User.findOne({ username });
 
   if (user && await user.isValidPassword(password)) {
-    res.send('Login successful');
+    res.status(200).json({ message: 'Login successful' });
   } else {
-    res.status(401).send('Invalid credentials');
+    res.status(401).json({ error: 'Invalid credentials' });
   }
 });
-
-// leaderboard
-app.get('/leaderboard/:classroom', async (req, res) => {
-  const { classroom } = req.params;
-  try {
-    const users = await User.find({ classroom })
-      .sort({ streak: -1 })
-      .select('username streak')
-      .limit(10);
-    res.json(users);
-  } catch (err) {
-    res.status(500).send('Error retrieving leaderboard');
-  }
-});
-
-//gemini
-/*
-req format
-{
-  "prompt": "text"
-}
-*/
-app.post('/gemini', async (req, res) => {
-  try {
-    const { prompt } = req.body;
-    if (!prompt) {
-      return res.status(400).json({ error: "Prompt is required" });
-    }
-
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [
-          {
-            parts: [{ text: prompt }]
-          }
-        ]
-      })
-    });
-
-    const data = await response.json();
-    const aiText = data.candidates[0].content.parts[0].text;
-
-    console.log(aiText);
-    res.json({ text: aiText });
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: "Something went wrong." });
-  }
-});
-
 
 // Start server
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
