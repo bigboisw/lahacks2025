@@ -48,8 +48,6 @@ function NewsPage() {
         <h2>Feel like you're ready?</h2>
         <button>Continue to quiz!</button>
         <div>
-      <h1>Login Page</h1>
-      <Login />
     </div>
         {quiz && (
           <Quiz

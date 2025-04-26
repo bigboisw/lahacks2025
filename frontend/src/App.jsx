@@ -1,16 +1,14 @@
 import Login from "./components/Login"
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import NewsList from './components/NewsList';
-import Quiz from './components/Quiz';
-import NewsPage from "./components/NewsPage"
+import NewsList from './components/NewsQuiz/NewsList';
+import NewsPage from './components/NewsQuiz/NewsPage';
 
 function App() {
 
   return (
     <div>
-      <h1>Login Page</h1>
-      <Login />
+      <NewsPage />
     </div>
   );
 }
