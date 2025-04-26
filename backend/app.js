@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import cors from 'cors';
 import 'dotenv/config'
+import { connectDB } from './db.js'
 
 const app = express();
 const apiKey = process.env.GOOGLE_API_KEY;
@@ -10,9 +11,7 @@ const apiKey = process.env.GOOGLE_API_KEY;
 app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(express.json());
 
-mongoose.connect('mongodb://localhost:27017/my_auth_app')
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log(err));
+await connectDB()
 
 // schema
 const UserSchema = new mongoose.Schema({
