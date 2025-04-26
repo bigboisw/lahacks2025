@@ -77,14 +77,19 @@ function Login() {
             required
           /><br/>
 
-          <input
-            type = "classroom"
-            placeholder="Classroom"
-            value={classroom}
-            onChange={e => setClassroom(e.target.value)}
-            className="login-input"
-            required
-          /><br/>
+          {mode === 'register' && (
+              <>
+                <input
+                  type="text"
+                  placeholder="Classroom"
+                  value={classroom}
+                  onChange={e => setClassroom(e.target.value)}
+                  className="login-input"
+                  required
+                />
+                <br/>
+              </>
+            )}
 
           <button type="submit" className="login-button">
             {mode==='login' ? 'Login' : 'Create Account'}  
