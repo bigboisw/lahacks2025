@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import cors from 'cors';
+import 'dotenv/config'
 
 const app = express();
 const apiKey = process.env.GOOGLE_API_KEY;
@@ -71,15 +72,27 @@ app.get('/leaderboard/:classroom', async (req, res) => {
   }
 });
 
+//gemini
+/*
+req format
+{
+  "prompt": "text"
+}
+*/
 app.post('/gemini', async (req, res) => {
   try {
+    const { prompt } = req.body;
+    if (!prompt) {
+      return res.status(400).json({ error: "Prompt is required" });
+    }
+
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         contents: [
           {
-            parts: [{ text: "Explain how AI works in a few words" }]
+            parts: [{ text: prompt }]
           }
         ]
       })
