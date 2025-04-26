@@ -3,7 +3,6 @@ import './Login.css';
 import newspaperImg from '../assets/newspaper.png';
 import { createUser } from './createUser';  // Use relative path if it's in the same folder
 
-
 function Login() {
   const [mode, setMode] = useState('login');
   const [username, setUsername] = useState('');
