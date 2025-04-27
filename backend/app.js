@@ -16,11 +16,7 @@ const jsonData = JSON.parse(
   )
 );
 
-<<<<<<< HEAD
 app.use(cors());
-=======
-app.use(cors({ origin: 'http://localhost:3000' }));
->>>>>>> d2d37291d521c63ec57b66e85ac4f7e7be77df43
 app.use(express.json());
 
 // Connect to the database
@@ -119,11 +115,7 @@ app.get('/quiz', async (req, res) => {
 
     let quizObject;
     try {
-<<<<<<< HEAD
-        
-=======
       quizObject = safeJsonParse(text);
->>>>>>> d2d37291d521c63ec57b66e85ac4f7e7be77df43
     } catch (parseError) {
       console.error("Error parsing quiz JSON:", parseError);
       return res.status(500).json({ error: "Failed to parse quiz content" });

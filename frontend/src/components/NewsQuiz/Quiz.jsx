@@ -16,8 +16,8 @@ const Quiz = ({ question, options, correctAnswer, onAnswer }) => {
         {options?.map((option, index) => (
           <div 
             key={index}
-            className={`option ${selectedOption === option ? 'selected' : ''}`}
-            onClick={() => handleAnswer(option)}
+            className={`option ${selectedOption === index ? 'selected' : ''}`}
+            onClick={() => handleAnswer(index)}
           >
             <span className="option-letter">
               {String.fromCharCode(65 + index)} {/* A, B, C, D */}
