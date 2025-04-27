@@ -15,13 +15,11 @@ function Login() {
 
   async function handleSubmit(e) {  
     e.preventDefault();
-    const endpoint = mode === 'login' ? '/login' : '/register';
     const payload = mode === 'login'
       ? { username, password }
       : { username, password, classroom };
 
     if (mode === 'register') {
-      // Use createUser function for registration
       try {
         await createUser(username, password, classroom);  // Call the createUser function here
         setMessage('Account created successfully!');
@@ -31,7 +29,6 @@ function Login() {
         console.log('Error creating account:', err);
       }
     } else {
-      // Handle login here
       const res = await fetch('http://localhost:3000/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -42,8 +39,17 @@ function Login() {
       setMessage(text);
 
       if (res.ok) {
-        navigate('/newsquiz')
+        localStorage.setItem('username', username); // Save username to local storage
+        localStorage.setItem('classroom', classroom); // Save classroom to local storage
+        navigate('/newsquiz');
         console.log('Login successful!');
+
+        // Fetch and log all users with their classrooms and streaks
+        const usersRes = await fetch('http://localhost:3000/getAllUsers');
+        const usersData = await usersRes.json();
+        localStorage.setItem('usersData', JSON.stringify(usersData)); // Save users data to local storage
+        // Log the users data as an object in the console, which includes streak
+        console.log('List of All Users with Streaks:', usersData);
       } else {
         console.log('Login failed');
       }
@@ -60,7 +66,6 @@ function Login() {
           >
             Login
           </button>
-
           <button
             className={mode === 'register' ? 'active' : ''}
             onClick={() => setMode('register')}

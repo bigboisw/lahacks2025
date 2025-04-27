@@ -1,97 +1,184 @@
 .board {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    border-radius: 8px;
-    background-color: #EAF2F8;
-  }
-  
-  .leaderboard {
-    background-color: #ffffff;
-    padding: 30px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    color: #333;
-    font-size: 2.2em;
-    margin-bottom: 20px;
-  }
-  
-  .duration {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-  }
-  
-  .duration button {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 2px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    font-size: .8em;
-    transition: background-color 0.3s ease;
-  }
-  
-  .duration button:hover {
-    background-color: #0056b3;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #EAF2F8;
+  position: relative; /* Added for absolute positioning of back button */
+}
 
-  .back-to-quiz-button {
-    position: absolute; /* Position absolutely within .board */
-    top: 20px;      /* Adjust as needed */
-    left: 20px;     /* Adjust as needed */
-    padding: 8px 12px;
-    border: none;
-    border-radius: 5px;
-    background-color: #4c59af; /* Example button color */
-    color: white;
-    cursor: pointer;
-    font-size: 0.9em;
-    transition: background-color 0.3s ease;
-  }
-  
-  .back-to-quiz-button:hover {
-    background-color: #073781; /* Darker shade on hover */
-  }
+.leaderboard {
+  padding: 30px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: #333;
+  font-size: 2.2em;
+  margin-bottom: 20px;
+  border-radius: 8px; /* Added for consistency */
+  width: 100%; /* Make it full width of parent */
+  text-align: center; /* Center the text */
+  transition: box-shadow 0.3s ease; /* Smooth transition for hover effect */
+}
 
-  .profiles-container {
-    justify-content: space-between;
-    display: flex;
-    margin-top: 20px;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px; /* Increased gap for more space */
-  }
-  
-  .profile {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #fafafa;
-    padding: 20px;
-    border-radius: 10px; /* Removed border radius */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 85%;
-    max-width: 400px;
-    margin: 0 auto;
-  }
-  
-  .profile-image {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 15px;
-    object-fit: cover;
-  }
-  
-  .profile-name {
-    font-size: 1.1em;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .profile-score {
-    font-size: 1em;
-    color: #666;
-  }
+.leaderboard:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Slightly elevated shadow on hover */
+}
+
+.duration {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.duration button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 2px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  font-size: .8em;
+  transition: all 0.3s ease; /* Changed from just background-color */
+}
+
+.duration button:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px); /* Subtle lift effect */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add shadow on hover */
+}
+
+.back-to-quiz-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4c59af;
+  color: white;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: all 0.3s ease; /* Changed from just background-color */
+  z-index: 10; /* Ensure it's above other elements */
+}
+
+.back-to-quiz-button:hover {
+  background-color: #073781;
+  transform: translateY(-2px); /* Subtle lift effect */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+}
+
+.profiles-container {
+  justify-content: space-between;
+  display: flex;
+  margin-top: 20px;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%; /* Make it take full width of parent */
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fafafa;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 85%;
+  max-width: 400px;
+  margin: 0 auto;
+  transition: all 0.3s ease; /* Add transition for hover effects */
+  position: relative; /* For the left border styling */
+  overflow: hidden; /* Prevent content from bleeding */
+}
+
+/* Add hover effect to profile cards */
+.profile:hover {
+  transform: translateY(-5px); /* Lift effect */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); /* Enhanced shadow */
+}
+
+/* Left colored border using pseudo-element */
+.profile::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: #4a6bff; /* Default border color */
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+/* First place styling (gold border) */
+.profile:first-child::before {
+  background-color: #ffc107; /* Gold color for first place */
+}
+
+.profile-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 15px;
+  object-fit: cover;
+  transition: transform 0.3s ease; /* Add transition for hover effect */
+}
+
+/* Add hover effect to profile images */
+.profile:hover .profile-image {
+  transform: scale(1.05); /* Slightly increase size on hover */
+}
+
+.profile-name {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #333;
+  transition: color 0.3s ease; /* Smooth color transition */
+}
+
+/* Add hover effect to profile name */
+.profile:hover .profile-name {
+  color: #007bff; /* Change text color on hover */
+}
+
+.profile-score {
+  font-size: 1em;
+  color: #666;
+  padding: 5px 10px; /* Add some padding */
+  border-radius: 15px; /* Make it pill-shaped */
+  background-color: #f0f0f0; /* Light background */
+  transition: all 0.3s ease; /* Smooth transition */
+}
+
+/* Add hover effect to profile score */
+.profile:hover .profile-score {
+  background-color: #e6f0ff; /* Change background on hover */
+  color: #0056b3; /* Change text color on hover */
+}
+
+/* Style for streak display */
+.streak {
+  font-size: 1em;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+}
+
+.streak-yellow {
+  background-color: #fff8e1;
+  color: #ff9800;
+}
+
+.streak-blue {
+  background-color: #e6f0ff;
+  color: #4a6bff;
+}
+
+/* Enhanced hover effect for streaks */
+.profile:hover .streak {
+  transform: scale(1.05);
+}
