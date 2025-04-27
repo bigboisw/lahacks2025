@@ -6,7 +6,6 @@ html, body, #root {
   font-family: 'Georgia', 'Times New Roman', serif; /* NYT vibe */
   background-color: #f8f9fa; /* Soft NYT-like background */
 }
-
 .login-container {
   position: fixed;
   top: 0;
@@ -14,10 +13,12 @@ html, body, #root {
   width: 100vw;
   height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;  /* Stack items vertically */
+  align-items: center;     /* Center items horizontally */
+  justify-content: center; /* Center items vertically */
   background-color: #f8f9fa;
   padding: 2rem;
+  box-sizing: border-box;  /* Ensures padding is inside the element */
 }
 
 .login-box {
@@ -40,9 +41,8 @@ html, body, #root {
 }
 
 .login-icon {
-  width: 25rem;
   height: 80px;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .login-form {
