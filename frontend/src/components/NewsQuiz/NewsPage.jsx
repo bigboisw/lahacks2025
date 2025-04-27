@@ -5,39 +5,55 @@ import Quiz from './Quiz';
 
 function NewsPage() {
   const [news, setNews] = useState([]);
-  const [quiz, setQuiz] = useState(null);
+  const [quiz, setQuiz] = useState([]);
   const [score, setScore] = useState(0);
   const [showQuiz, setShowQuiz] = useState(false); // New state to control quiz visibility
+  const numArticles = 3;
+
+  // Fetch article info
+  async function fetchArticle(i) {
+    try {
+      const response = await fetch(`http://localhost:3000/article?index=${i}`);
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+      const data = await response.json();
+      setNews(prevNews => {
+        const newNews = [...prevNews];
+        newNews[i] = data;
+        return newNews;
+      });      
+    } catch (error) {
+      console.error('Error fetching article:', error);
+    }
+  }
+
+  // Fetch quiz question
+  async function fetchQuiz(i) {
+    try {
+      const response = await fetch(`http://localhost:3000/quiz?index=${i}`);
+      const data = await response.json();
+      setQuiz(prevQuiz => {
+        const newQuiz = [...prevQuiz];
+        newQuiz[i] = data;
+        return newQuiz;
+      });
+    } catch (error) {
+      console.error('Error fetching quiz:', error);
+    }
+  }
 
   useEffect(() => {
-    // Placeholder news data
-    const placeholderNews = [
-      {
-        title: 'News 1',
-        description: 'Description 1',
-        url: 'http://example.com/news1',
-      },
-      {
-        title: 'News 2',
-        description: 'Description 2',
-        url: 'http://example.com/news2',
-      },
-    ];
-    setNews(placeholderNews);
-
-    // Generate a quiz based on the news
-    const quizData = {
-      question: 'What is the title of the first news?',
-      options: ['News 1', 'News 2', 'News 3', 'News 4'],
-      correctAnswer: 'News 1',
-    };
-    setQuiz(quizData);
+    for (let i = 0; i < numArticles; i++) {
+      fetchArticle(i);
+      fetchQuiz(i);
+    }
   }, []);
 
   const handleAnswer = (isCorrect) => {
     if (isCorrect) {
-      setScore(score + 1);
-    }
+      setScore(prevScore => prevScore + 1);
+    }    
   };
 
   const handleContinueClick = () => {
@@ -65,20 +81,23 @@ function NewsPage() {
         <h1>News Quiz</h1>
         <NewsList news={news} />
         
-        {!showQuiz ? ( // Only show this section if quiz is not visible
+        {!showQuiz ? (
           <>
             <h2>Feel like you're ready?</h2>
             <button onClick={handleContinueClick}>Continue to quiz!</button>
           </>
         ) : (
-          quiz && ( // Only show quiz if it's loaded and showQuiz is true
+          Array.isArray(quiz) && quiz.map((q, index) => (
+            q ? (
             <Quiz
-              question={quiz.question}
-              options={quiz.options}
-              correctAnswer={quiz.correctAnswer}
+              key={index}
+              question={q.question}
+              options={q.options}
+              correctAnswer={q.correctAnswer}
               onAnswer={handleAnswer}
             />
-          )
+            ) : null
+          ))
         )}
         
         {showQuiz && <p>Score: {score}</p>} {/* Only show score after quiz starts */}

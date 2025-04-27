@@ -1,12 +1,19 @@
 import express from 'express';
 import cors from 'cors';
-import 'dotenv/config';
-import { connectDB } from './db.js';
+import 'dotenv/config'
+import { connectDB } from './db.js'
+import { readFile } from 'fs/promises';
 import User from './models/User.js';  // Import the User model
 import { createUser } from './createUser.js';  // Import the createUser function
 
 const app = express();
 const apiKey = process.env.GOOGLE_API_KEY;
+const prompt = "You are a quiz generator. Given a news article title and the full article text, generate one multiple-choice quiz question based on the article. Instructions: - Provide exactly 4 multiple choice options in a list. - Indicate the correct answer using 0-based indexing (0, 1, 2, or 3). - Output the result as a pure JSON object using the following strict structure: { \"question\": \"Your question text here\", \"options\": [\"Option 1\", \"Option 2\", \"Option 3\", \"Option 4\"], \"correctAnswer\": 2 } Rules: - Base the question strictly on the article content. - Ensure there is only one correct option. - Place the correct answer randomly among the four options. - Avoid ambiguous or opinion-based questions. - Use clear and simple language appropriate for a general audience. Important: - You must output **only** the JSON object. - No explanations, no comments, no greetings, no markdown, no extra text. - Only valid JSON starting with '{' and ending with '}'.";
+const jsonData = JSON.parse(
+  await readFile(
+    new URL('./articles.json', import.meta.url)
+  )
+);
 
 app.use(cors({ origin: 'http://localhost:3001' }));
 app.use(express.json());
@@ -42,6 +49,80 @@ app.post('/login', async (req, res) => {
     res.status(200).json({ message: 'Login successful' });
   } else {
     res.status(401).json({ error: 'Invalid credentials' });
+  }
+});
+
+// leaderboard
+app.get('/leaderboard/:classroom', async (req, res) => {
+  const { classroom } = req.params;
+  try {
+    const users = await User.find({ classroom })
+      .sort({ points: -1 })
+      .select('username points')
+      .limit(10);
+    res.json(users);
+  } catch (err) {
+    res.status(500).send('Error retrieving leaderboard');
+  }
+});
+
+app.get('/article', async (req, res) => {
+  const { index } = req.query;
+  const i = parseInt(index); // Make sure it's a number
+  if (isNaN(i) || i < 0 || i >= jsonData.length) {
+    return res.status(400).json({ error: "Invalid article index" });
+  }
+
+  try {
+    const article = jsonData[index];
+    res.json({ title: article.title, url: article.url });
+  } catch (error) {
+    console.error("Error sending article:", error);
+    res.status(500).json({ error: "Failed to fetch article" });
+  }
+});
+
+app.get('/quiz', async (req, res) => {
+  const { index } = req.query;
+  const i = parseInt(index);
+  if (isNaN(i) || i < 0 || i >= jsonData.length) {
+    return res.status(400).json({ error: "Invalid article index" });
+  }
+
+  try {
+    const articleText = jsonData[i].paragraphs.join('\n\n');
+    const fullPrompt = prompt + articleText;
+
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [
+          {
+            parts: [{ text: fullPrompt }]
+          }
+        ]
+      })
+    });
+
+    const rawData = await response.json();
+    let text = rawData.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
+
+    // CLEANUP to remove bad formatting
+    text = text.replace(/```json|```/g, '').trim();
+
+    let quizObject;
+    try {
+      quizObject = JSON.parse(text);
+    } catch (parseError) {
+      console.error("Error parsing quiz JSON:", parseError);
+      return res.status(500).json({ error: "Failed to parse quiz content" });
+    }
+
+    res.json(quizObject);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: "Failed to fetch quiz question" });
   }
 });
 

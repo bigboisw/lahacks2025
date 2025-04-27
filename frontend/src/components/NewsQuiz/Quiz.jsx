@@ -13,7 +13,7 @@ const Quiz = ({ question, options, correctAnswer, onAnswer }) => {
     <div className="quiz-container">
       <h2 className="quiz-question">{question}</h2>
       <div className="options-container">
-        {options.map((option, index) => (
+        {options?.map((option, index) => (
           <div 
             key={index}
             className={`option ${selectedOption === option ? 'selected' : ''}`}
