@@ -1,0 +1,97 @@
+.board {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #EAF2F8;
+  }
+  
+  .leaderboard {
+    background-color: #ffffff;
+    padding: 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: #333;
+    font-size: 2.2em;
+    margin-bottom: 20px;
+  }
+  
+  .duration {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .duration button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 2px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    font-size: .8em;
+    transition: background-color 0.3s ease;
+  }
+  
+  .duration button:hover {
+    background-color: #0056b3;
+  }
+
+  .back-to-quiz-button {
+    position: absolute; /* Position absolutely within .board */
+    top: 20px;      /* Adjust as needed */
+    left: 20px;     /* Adjust as needed */
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4c59af; /* Example button color */
+    color: white;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
+  }
+  
+  .back-to-quiz-button:hover {
+    background-color: #073781; /* Darker shade on hover */
+  }
+
+  .profiles-container {
+    justify-content: space-between;
+    display: flex;
+    margin-top: 20px;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* Increased gap for more space */
+  }
+  
+  .profile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fafafa;
+    padding: 20px;
+    border-radius: 10px; /* Removed border radius */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 85%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .profile-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+    object-fit: cover;
+  }
+  
+  .profile-name {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .profile-score {
+    font-size: 1em;
+    color: #666;
+  }
