@@ -5,6 +5,8 @@ const Quiz = ({ question, options, correctAnswer, onAnswer }) => {
   const [selectedOption, setSelectedOption] = React.useState(null);
 
   const handleAnswer = (option) => {
+    if (selectedOption !== null) return;
+
     setSelectedOption(option);
     onAnswer(option === correctAnswer);
   };
@@ -16,7 +18,11 @@ const Quiz = ({ question, options, correctAnswer, onAnswer }) => {
         {options?.map((option, index) => (
           <div 
             key={index}
-            className={`option ${selectedOption === index ? 'selected' : ''}`}
+            className={[
+              'option',
+              selectedOption === index ? 'selected' : '',
+              selectedOption !== null ? 'locked' : ''
+            ].join(' ')}
             onClick={() => handleAnswer(index)}
           >
             <span className="option-letter">
