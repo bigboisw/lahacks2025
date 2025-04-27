@@ -1,4 +1,5 @@
 import express from 'express';
+import JSON5  from 'json5';
 import cors from 'cors';
 import 'dotenv/config'
 import { connectDB } from './db.js'
@@ -15,7 +16,7 @@ const jsonData = JSON.parse(
   )
 );
 
-app.use(cors({ origin: 'http://localhost:3001' }));
+app.use(cors());
 app.use(express.json());
 
 // Connect to the database
@@ -96,7 +97,7 @@ app.get('/quiz', async (req, res) => {
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+      body: JSON5.stringify({
         contents: [
           {
             parts: [{ text: fullPrompt }]
@@ -113,7 +114,7 @@ app.get('/quiz', async (req, res) => {
 
     let quizObject;
     try {
-      quizObject = JSON.parse(text);
+        
     } catch (parseError) {
       console.error("Error parsing quiz JSON:", parseError);
       return res.status(500).json({ error: "Failed to parse quiz content" });
