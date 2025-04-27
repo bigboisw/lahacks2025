@@ -1,100 +1,83 @@
 /* Quiz Container */
 .quiz-container {
-  width: 100%; /* Important! */
-  padding: 30px 25px;
-  background: linear-gradient(135deg, #2c3e50, #34495e);
-  border-radius: 20px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-  color: #e2e8f0;
+  width: 100%;
+  padding: 2rem; /* Add nice even padding all around */
+  background: #f7f7f7; /* Light soft grey background */
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  color: #111111;
   animation: fadeIn 0.5s ease;
+  font-family: 'Georgia', 'Times New Roman', serif; /* NYT-style font */
+  box-sizing: border-box; /* Important: padding does not cause overflow */
 }
 
 /* Quiz Question */
 .quiz-question {
-  color: #ffffff;
-  margin-bottom: 30px;
-  font-size: 1.6rem;
-  text-align: center;
-  line-height: 1.6;
+  font-size: 1.5rem;
   font-weight: bold;
+  color: #000000;
+  margin-bottom: 2rem;
+  text-align: left;
 }
 
 /* Options Container */
 .options-container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1rem;
 }
 
-/* Option Buttons */
+/* Each Option */
 .option {
   display: flex;
   align-items: center;
-  padding: 20px;
-  background-color: #4a5568;
-  border: 2px solid transparent;
-  border-radius: 12px;
+  padding: 1rem;
+  background-color: #ffffff; /* White options inside grey card */
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  transform: scale(1);
+  transition: all 0.2s ease;
 }
 
 /* Hover effect */
 .option:hover {
-  background-color: #5a677a;
-  transform: scale(1.02);
+  background-color: #f0f0f0;
 }
 
 /* Selected Option */
 .option.selected {
-  background-color: #3a4a6b;
-  border-color: #4299e1;
-  box-shadow: 0 0 10px #4299e1;
+  background-color: #e0e0e0;
+  border-color: #000000;
 }
 
-/* Correct / Incorrect Styling */
-.option.correct {
-  background-color: #2f855a;
-  border-color: #38a169;
-  box-shadow: 0 0 10px #38a169;
-}
-
-.option.incorrect {
-  background-color: #9b2c2c;
-  border-color: #e53e3e;
-  box-shadow: 0 0 10px #e53e3e;
-}
-
-/* Option Letter (A, B, C, D) */
+/* Option Letter */
 .option-letter {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  margin-right: 18px;
-  background-color: #718096;
-  border-radius: 50%;
   font-weight: bold;
-  font-size: 1rem;
-  color: #ffffff;
-  flex-shrink: 0;
-  transition: background-color 0.3s ease;
-}
-
-/* When selected, change letter color */
-.option.selected .option-letter {
-  background-color: #4299e1;
+  margin-right: 1rem;
+  font-size: 1.1rem;
+  color: #333333;
 }
 
 /* Option Text */
 .option-text {
   flex-grow: 1;
   font-size: 1.15rem;
+  color: #222222;
   text-align: left;
 }
 
-/* Fade-in animation */
+/* Correct/Incorrect Styling */
+.option.correct {
+  background-color: #d4edda;
+  border-color: #28a745;
+}
+
+.option.incorrect {
+  background-color: #f8d7da;
+  border-color: #dc3545;
+}
+
+/* Fade-in Animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -102,15 +85,14 @@
   }
   to {
     opacity: 1;
-    transform: translateY(0px);
+    transform: translateY(0);
   }
 }
 
 /* Responsive */
 @media (max-width: 640px) {
   .quiz-container {
-    padding: 20px;
-    margin: 0 15px;
+    padding: 1.5rem;
   }
   
   .quiz-question {
@@ -118,6 +100,6 @@
   }
   
   .option {
-    padding: 16px;
+    padding: 0.8rem;
   }
 }
