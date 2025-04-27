@@ -15,7 +15,7 @@ const jsonData = JSON.parse(
   )
 );
 
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: 'http://localhost:3001' }));
 app.use(express.json());
 
 // Connect to the database
