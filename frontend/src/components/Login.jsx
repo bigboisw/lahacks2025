@@ -22,7 +22,7 @@ function Login() {
     if (mode === 'register') {
       try {
         await createUser(username, password, classroom);  // Call the createUser function here
-        setMessage('Account created successfully!');
+        setMessage('Account created successfully! Go to login.');
         console.log('Account created successfully!');
       } catch (err) {
         setMessage('Error creating account: ' + err.message);
@@ -57,7 +57,10 @@ function Login() {
   }
 
   return (
+    
     <div className="login-container">
+      <img className="login-icon" src={newspaperImg} alt="Login Icon" />
+
       <div className="login-box">
         <div className="mode-toggle">
           <button
@@ -75,10 +78,9 @@ function Login() {
         </div>
 
         <h1 className="login-title">
-          {mode === 'login' ? 'Current Events Login' : 'Account Registration'}
+          {mode === 'login' ? 'Login' : 'Account Registration'}
         </h1>
 
-        <img className="login-icon" src={newspaperImg} alt="Login Icon" />
 
         <form onSubmit={handleSubmit} className="login-form">
           <input
@@ -109,6 +111,7 @@ function Login() {
                 className="login-input"
                 required
               />
+              {message && <p className="message">{message}</p>}
               <br />
             </>
           )}
