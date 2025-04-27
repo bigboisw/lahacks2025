@@ -15,7 +15,7 @@ const jsonData = JSON.parse(
   )
 );
 
-app.use(cors({ origin: 'http://localhost:3001' }));
+app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json());
 
 // Connect to the database
@@ -109,11 +109,12 @@ app.get('/quiz', async (req, res) => {
     let text = rawData.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
 
     // CLEANUP to remove bad formatting
+    
     text = text.replace(/```json|```/g, '').trim();
 
     let quizObject;
     try {
-      quizObject = JSON.parse(text);
+      quizObject = safeJsonParse(text);
     } catch (parseError) {
       console.error("Error parsing quiz JSON:", parseError);
       return res.status(500).json({ error: "Failed to parse quiz content" });
@@ -125,6 +126,29 @@ app.get('/quiz', async (req, res) => {
     res.status(500).json({ error: "Failed to fetch quiz question" });
   }
 });
+
+function safeJsonParse(text) {
+  try {
+    return JSON.parse(text);
+  } catch (err) {
+    console.error("First parse failed. Trying to clean...");
+
+    // Try to auto-fix small common errors
+    // Remove trailing commas before closing brackets
+    const fixedText = text
+      .replace(/,\s*]/g, ']')   // fix trailing comma in arrays
+      .replace(/,\s*}/g, '}')   // fix trailing comma in objects
+      .trim();
+
+    try {
+      return JSON.parse(fixedText);
+    } catch (err2) {
+      console.error("Second parse failed too.");
+      throw err2; // rethrow the original error
+    }
+  }
+}
+
 
 // Start server
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
