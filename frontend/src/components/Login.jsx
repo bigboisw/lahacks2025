@@ -22,7 +22,7 @@ function Login() {
     if (mode === 'register') {
       try {
         await createUser(username, password, classroom);  // Call the createUser function here
-        setMessage('Account created successfully!');
+        setMessage('Account created successfully! Go to login.');
         console.log('Account created successfully!');
       } catch (err) {
         setMessage('Error creating account: ' + err.message);
@@ -111,6 +111,7 @@ function Login() {
                 className="login-input"
                 required
               />
+              {message && <p className="message">{message}</p>}
               <br />
             </>
           )}
