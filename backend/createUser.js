@@ -1,16 +1,19 @@
-const axios = require('axios');
+import bcrypt from 'bcrypt';
+import User from './models/User.js'; // Assuming your User model is in a 'models' folder
 
-async function createUser(username, password, classroom) {
-  try {
-    const res = await axios.post('http://localhost:3000/register', {
-      username,
-      password,
-      classroom
-    });
-    console.log('User created successfully:', res.data);
-  } catch (err) {
-    console.error('Error creating user:', err.response ? err.response.data : err.message);
+// Function to create a new user
+export const createUser = async (username, password, classroom) => {
+  // Check if user already exists
+  const existingUser = await User.findOne({ username });
+  if (existingUser) {
+    throw new Error('Username already exists');
   }
-}
 
-createUser('alice', 'secret', 'elite');
+  // Hash password
+  const passwordHash = await bcrypt.hash(password, 10);
+
+  // Create and save new user
+  const user = new User({ username, passwordHash, classroom });
+  await user.save();
+  return user;
+};

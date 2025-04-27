@@ -60,9 +60,24 @@ function NewsPage() {
     setShowQuiz(true); // Show the quiz when button is clicked
   };
 
+  const handletoLeaderboard = () => {
+    // Replace this with your actual navigation logic (e.g., using React Router)
+    console.log('To Leaderboard clicked!');
+};
+  const handleLogout = () => {
+    // Replace this with your actual navigation logic (e.g., using React Router)
+    console.log('Logging out');
+};
+
   return (
-    <div className="App">
-      <header className="App-header">
+    <div className="Newspage">
+          <button className="back-to-leaderboard-button" onClick={handletoLeaderboard}>
+            Leaderboard
+          </button>
+          <button className="logout" onClick={handleLogout}>
+            Log out
+          </button>
+      <header className="Newspage-header">
         <h1>News Quiz</h1>
         <NewsList news={news} />
         
