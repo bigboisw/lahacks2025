@@ -28,7 +28,7 @@ export default function Leaderboard() {
         <div className="profile-details">
           <div className="profile-rank">Rank: {rank}</div>
           <div className="profile-name">{name}</div>
-          <div className="profile-score">Streak: {streak}</div>
+          <div className="profile-score">Score: {streak}</div>
         </div>
       </div>
     );
