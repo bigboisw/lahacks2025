@@ -162,6 +162,39 @@ function safeJsonParse(text) {
   }
 }
 
+// Increment leaderboard streak score
+app.post('/increment-score', async (req, res) => {
+  const {username, delta} = req.body;
+
+  console.log('body:', req.body);
+
+  if (!username || typeof delta !== 'number') {
+    return res  
+      .status(400)
+      .json({ error: 'Request must include valid username and numeric delta value'})
+  }
+
+  try {
+    const user = await User.findOneAndUpdate(
+      { username },
+      { $inc: { streak: delta } },
+      { new: true }
+    );
+    console.log(user.streak)
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json({ username: user.username, newStreak: user.streak })
+
+    
+  } catch (error) {
+    console.error('Error incrementing score:', error)
+    res.status(500).json({ error: 'Internal Server Error' })
+  }
+})
+
 
 // Start server
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));

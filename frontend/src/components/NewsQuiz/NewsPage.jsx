@@ -53,10 +53,43 @@ function NewsPage() {
     }
   }, []);
 
-  const handleAnswer = (isCorrect) => {
-    if (isCorrect) {
-      setScore(prevScore => prevScore + 1);
-    }    
+  const handleAnswer = async (isCorrect) => {
+    if (!isCorrect) return;
+    setScore(prev => prev + 1);
+
+    const username = localStorage.getItem('username');
+    if (!username) {
+      console.error('No username in localStorage!');
+      return;
+    }
+
+    try {
+      const res = await fetch('http://localhost:3000/increment-score', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username,
+          delta: 1
+        })
+      });
+      if (!res.ok) {
+        console.error('Server error incrementing score:', await res.text());
+      }
+
+      const { newStreak } = await res.json();
+
+    // ② update localStorage usersData
+    const usersData = JSON.parse(localStorage.getItem('usersData')) || [];
+    const updated = usersData.map(u =>
+      u.username === username
+        ? { ...u, streak: newStreak }
+        : u
+    );
+    localStorage.setItem('usersData', JSON.stringify(updated));
+    
+    } catch (err) {
+      console.error('Network error incrementing score:', err);
+    }
   };
 
   const handleContinueClick = () => {
