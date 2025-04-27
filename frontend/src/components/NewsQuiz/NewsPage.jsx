@@ -90,17 +90,19 @@ function NewsPage() {
             <button onClick={handleContinueClick}>Continue to quiz!</button>
           </>
         ) : (
-          Array.isArray(quiz) && quiz.map((q, index) => (
-            q ? (
-            <Quiz
-              key={index}
-              question={q.question}
-              options={q.options}
-              correctAnswer={q.correctAnswer}
-              onAnswer={handleAnswer}
-            />
-            ) : null
-          ))
+          <div className="QuizList"> {/* <--- Wrap all quizzes here */}
+            {Array.isArray(quiz) && quiz.map((q, index) => (
+              q ? (
+                <Quiz
+                  key={index}
+                  question={q.question}
+                  options={q.options}
+                  correctAnswer={q.correctAnswer}
+                  onAnswer={handleAnswer}
+                />
+              ) : null
+            ))}
+          </div>
         )}
         
         {showQuiz && <p>Score: {score}</p>} {/* Only show score after quiz starts */}
