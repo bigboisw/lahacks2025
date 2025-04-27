@@ -27,7 +27,7 @@ export default function leaderboard(){
           { name: 'David Dobrik', score: 950, imageUrl: 'https://via.placeholder.com/50' },
         ];
 
-        const profilesData = [...unsortedProfilesData].sort((a, b) => b.score - a.score);
+      const profilesData = [...unsortedProfilesData].sort((a, b) => b.score - a.score);
 
       const handleBackToQuiz = () => {
           navigate('/newsquiz')
@@ -41,8 +41,6 @@ export default function leaderboard(){
           </button>
             <h1 className = 'leaderboard'>Leaderboard</h1>
             <div className="duration">
-                <button onClick={(handleClick)}>All Time</button>
-                <button onClick={(handleClick)}>Within Classroom</button>
             </div>
             <div className="profiles-container">
             {profilesData.map((profile, index) => (
@@ -55,4 +53,9 @@ export default function leaderboard(){
             </div>
         </div>
     )
+
+    /*
+                    <button onClick={(handleClick)}>All Time</button>
+                <button onClick={(handleClick)}>Within Classroom</button>
+    */
 }
