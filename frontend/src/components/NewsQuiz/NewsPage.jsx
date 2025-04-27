@@ -8,31 +8,37 @@ function NewsPage() {
   const [quiz, setQuiz] = useState(null);
   const [score, setScore] = useState(0);
   const [showQuiz, setShowQuiz] = useState(false); // New state to control quiz visibility
+  const [index, setIndex] = useState(0); // Current article index
+
+  // Fetch article info
+  async function fetchArticle(i) {
+    try {
+      const response = await fetch(`http://localhost:3000/article?i=${i}`);
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+      const data = await response.json();
+      setNews(prevNews => [...prevNews, data]);
+    } catch (error) {
+      console.error('Error fetching article:', error);
+    }
+  }
+
+  // Fetch quiz question
+  async function fetchQuiz(i) {
+    try {
+      const response = await fetch(`http://localhost:3000/quiz?i=${i}`);
+      const data = await response.json();
+      setQuiz(data);
+    } catch (error) {
+      console.error('Error fetching quiz:', error);
+    }
+  }
 
   useEffect(() => {
-    // Placeholder news data
-    const placeholderNews = [
-      {
-        title: 'News 1',
-        description: 'Description 1',
-        url: 'http://example.com/news1',
-      },
-      {
-        title: 'News 2',
-        description: 'Description 2',
-        url: 'http://example.com/news2',
-      },
-    ];
-    setNews(placeholderNews);
-
-    // Generate a quiz based on the news
-    const quizData = {
-      question: 'What is the title of the first news?',
-      options: ['News 1', 'News 2', 'News 3', 'News 4'],
-      correctAnswer: 'News 1',
-    };
-    setQuiz(quizData);
-  }, []);
+    fetchArticle(index);
+    fetchQuiz(index);
+  }, [index]);
 
   const handleAnswer = (isCorrect) => {
     if (isCorrect) {
