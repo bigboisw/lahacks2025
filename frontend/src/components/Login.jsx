@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 import './Login.css';
 import newspaperImg from '../assets/newspaper.png';
 import { createUser } from './createUser';  // Use relative path if it's in the same folder
@@ -9,6 +10,8 @@ function Login() {
   const [password, setPassword] = useState('');
   const [classroom, setClassroom] = useState('');
   const [message, setMessage] = useState('');
+
+  const navigate = useNavigate();
 
   async function handleSubmit(e) {  
     e.preventDefault();
@@ -39,6 +42,7 @@ function Login() {
       setMessage(text);
 
       if (res.ok) {
+        navigate('/newsquiz')
         console.log('Login successful!');
       } else {
         console.log('Login failed');
