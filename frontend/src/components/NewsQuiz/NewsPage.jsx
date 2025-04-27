@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import './NewsPage.css';
 import NewsList from './NewsList';
 import Quiz from './Quiz';
@@ -9,6 +10,8 @@ function NewsPage() {
   const [score, setScore] = useState(0);
   const [showQuiz, setShowQuiz] = useState(false); // New state to control quiz visibility
   const numArticles = 3;
+
+  const navigate = useNavigate();
 
   // Fetch article info
   async function fetchArticle(i) {
@@ -62,11 +65,11 @@ function NewsPage() {
 
   const handletoLeaderboard = () => {
     // Replace this with your actual navigation logic (e.g., using React Router)
-    console.log('To Leaderboard clicked!');
+    navigate('/Leaderboard');
 };
   const handleLogout = () => {
     // Replace this with your actual navigation logic (e.g., using React Router)
-    console.log('Logging out');
+    navigate('/');
 };
 
   return (

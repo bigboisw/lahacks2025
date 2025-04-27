@@ -1,6 +1,8 @@
 import React from 'react'
 import './Leaderboard.css'
+import { useNavigate } from 'react-router';
 export default function leaderboard(){
+  const navigate = useNavigate();
 
     const handleClick = () => {
         console.log(e.target)
@@ -9,7 +11,6 @@ export default function leaderboard(){
     const Profile = ({ name, score, imageUrl }) => {
         return (
           <div className="profile">
-            <img src={imageUrl} alt={name} className="profile-image" />
             <div className="profile-details">
               <div className="profile-name">{name}</div>
               <div className="profile-score">Score: {score}</div>
@@ -19,15 +20,17 @@ export default function leaderboard(){
       };
       
         // Sample data for profiles (replace with your actual data)
-        const profilesData = [
+        const unsortedProfilesData = [
           { name: 'Alice Marshall', score: 1250, imageUrl: 'https://via.placeholder.com/50' },
           { name: 'Bob Marley', score: 1100, imageUrl: 'https://via.placeholder.com/50' },
           { name: 'Charlie Brown', score: 1000, imageUrl: 'https://via.placeholder.com/50' },
           { name: 'David Dobrik', score: 950, imageUrl: 'https://via.placeholder.com/50' },
         ];
+
+        const profilesData = [...unsortedProfilesData].sort((a, b) => b.score - a.score);
+
       const handleBackToQuiz = () => {
-          // Replace this with your actual navigation logic (e.g., using React Router)
-          console.log('Back to Quiz clicked!');
+          navigate('/newsquiz')
       };
   
 
@@ -47,7 +50,6 @@ export default function leaderboard(){
                 key={index}
                 name={profile.name} 
                 score={profile.score}
-                imageUrl={profile.imageUrl}
             />  
         ))}
             </div>
