@@ -6,6 +6,7 @@ import NewsPage from './components/NewsQuiz/NewsPage';
 import Leaderboard from './components/Leaderboard/Leaderboard'
 import { BrowserRouter as Router, Routes, Route } from 'react-router';
 
+
 function App() {
   return (
     <div>
