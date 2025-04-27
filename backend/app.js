@@ -16,7 +16,7 @@ const jsonData = JSON.parse(
   )
 );
 
-app.use(cors({ origin: 'http://localhost:5173' }));
+app.use(cors());
 app.use(express.json());
 
 await connectDB()
@@ -83,7 +83,7 @@ app.get('/article', async (req, res) => {
   console.log("hi?");
   const { index } = req.query;
   const i = parseInt(index); // Make sure it's a number
-  if (isNaN(index) || index < 0 || index >= jsonData.length) {
+  if (isNaN(i) || i < 0 || i >= jsonData.length) {
     return res.status(400).json({ error: "Invalid article index" });
   }
 
@@ -100,7 +100,7 @@ app.get('/article', async (req, res) => {
 app.get('/quiz', async (req, res) => {
   const { index } = req.query;
   const i = parseInt(index); // Make sure it's a number
-  if (isNaN(index) || index < 0 || index >= jsonData.length) {
+  if (isNaN(i) || i < 0 || i >= jsonData.length) {
     return res.status(400).json({ error: "Invalid article index" });
   }
 

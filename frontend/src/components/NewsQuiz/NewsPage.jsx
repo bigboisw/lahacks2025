@@ -8,17 +8,21 @@ function NewsPage() {
   const [quiz, setQuiz] = useState(null);
   const [score, setScore] = useState(0);
   const [showQuiz, setShowQuiz] = useState(false); // New state to control quiz visibility
-  const [index, setIndex] = useState(0); // Current article index
+  const numArticles = 3;
 
   // Fetch article info
   async function fetchArticle(i) {
     try {
-      const response = await fetch(`http://localhost:3000/article?i=${i}`);
+      const response = await fetch(`http://localhost:3000/article?index=${i}`);
       if (!response.ok) {
         throw new Error(`Server error: ${response.status}`);
       }
       const data = await response.json();
-      setNews(prevNews => [...prevNews, data]);
+      setNews(prevNews => {
+        const newNews = [...prevNews];
+        newNews[i] = data;
+        return newNews;
+      });      
     } catch (error) {
       console.error('Error fetching article:', error);
     }
@@ -27,7 +31,7 @@ function NewsPage() {
   // Fetch quiz question
   async function fetchQuiz(i) {
     try {
-      const response = await fetch(`http://localhost:3000/quiz?i=${i}`);
+      const response = await fetch(`http://localhost:3000/quiz?index=${i}`);
       const data = await response.json();
       setQuiz(data);
     } catch (error) {
@@ -36,14 +40,16 @@ function NewsPage() {
   }
 
   useEffect(() => {
-    fetchArticle(index);
-    fetchQuiz(index);
-  }, [index]);
+    for (let i = 0; i < numArticles; i++) {
+      fetchArticle(i);
+    }
+    fetchQuiz(0);
+  }, []);
 
   const handleAnswer = (isCorrect) => {
     if (isCorrect) {
-      setScore(score + 1);
-    }
+      setScore(prevScore => prevScore + 1);
+    }    
   };
 
   const handleContinueClick = () => {
