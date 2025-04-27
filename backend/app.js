@@ -1,8 +1,8 @@
 import express from 'express';
 import JSON5  from 'json5';
 import cors from 'cors';
-import 'dotenv/config'
-import { connectDB } from './db.js'
+import 'dotenv/config';
+import { connectDB } from './db.js';
 import { readFile } from 'fs/promises';
 import User from './models/User.js';  // Import the User model
 import { createUser } from './createUser.js';  // Import the createUser function
@@ -10,6 +10,7 @@ import { createUser } from './createUser.js';  // Import the createUser function
 const app = express();
 const apiKey = process.env.GOOGLE_API_KEY;
 const prompt = "You are a quiz generator. Given a news article title and the full article text, generate one multiple-choice quiz question based on the article. Instructions: - Provide exactly 4 multiple choice options in a list. - Indicate the correct answer using 0-based indexing (0, 1, 2, or 3). - Output the result as a pure JSON object using the following strict structure: { \"question\": \"Your question text here\", \"options\": [\"Option 1\", \"Option 2\", \"Option 3\", \"Option 4\"], \"correctAnswer\": 2 } Rules: - Base the question strictly on the article content. - Ensure there is only one correct option. - Place the correct answer randomly among the four options. - Avoid ambiguous or opinion-based questions. - Use clear and simple language appropriate for a general audience. Important: - You must output **only** the JSON object. - No explanations, no comments, no greetings, no markdown, no extra text. - Only valid JSON starting with '{' and ending with '}'.";
+
 const jsonData = JSON.parse(
   await readFile(
     new URL('./articles.json', import.meta.url)
@@ -64,6 +65,17 @@ app.get('/leaderboard/:classroom', async (req, res) => {
     res.json(users);
   } catch (err) {
     res.status(500).send('Error retrieving leaderboard');
+  }
+});
+
+// Get all users with classrooms
+app.get('/getAllUsers', async (req, res) => {
+  try {
+    // Fetch all users with their usernames and classrooms
+    const users = await User.find().select('username classroom streak');
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ error: 'Error retrieving users' });
   }
 });
 
