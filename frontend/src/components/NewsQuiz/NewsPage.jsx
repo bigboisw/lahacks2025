@@ -5,7 +5,7 @@ import Quiz from './Quiz';
 
 function NewsPage() {
   const [news, setNews] = useState([]);
-  const [quiz, setQuiz] = useState(null);
+  const [quiz, setQuiz] = useState([]);
   const [score, setScore] = useState(0);
   const [showQuiz, setShowQuiz] = useState(false); // New state to control quiz visibility
   const numArticles = 3;
@@ -33,7 +33,11 @@ function NewsPage() {
     try {
       const response = await fetch(`http://localhost:3000/quiz?index=${i}`);
       const data = await response.json();
-      setQuiz(data);
+      setQuiz(prevQuiz => {
+        const newQuiz = [...prevQuiz];
+        newQuiz[i] = data;
+        return newQuiz;
+      });
     } catch (error) {
       console.error('Error fetching quiz:', error);
     }
@@ -42,8 +46,8 @@ function NewsPage() {
   useEffect(() => {
     for (let i = 0; i < numArticles; i++) {
       fetchArticle(i);
+      fetchQuiz(i);
     }
-    fetchQuiz(0);
   }, []);
 
   const handleAnswer = (isCorrect) => {
@@ -62,20 +66,23 @@ function NewsPage() {
         <h1>News Quiz</h1>
         <NewsList news={news} />
         
-        {!showQuiz ? ( // Only show this section if quiz is not visible
+        {!showQuiz ? (
           <>
             <h2>Feel like you're ready?</h2>
             <button onClick={handleContinueClick}>Continue to quiz!</button>
           </>
         ) : (
-          quiz && ( // Only show quiz if it's loaded and showQuiz is true
+          Array.isArray(quiz) && quiz.map((q, index) => (
+            q ? (
             <Quiz
-              question={quiz.question}
-              options={quiz.options}
-              correctAnswer={quiz.correctAnswer}
+              key={index}
+              question={q.question}
+              options={q.options}
+              correctAnswer={q.correctAnswer}
               onAnswer={handleAnswer}
             />
-          )
+            ) : null
+          ))
         )}
         
         {showQuiz && <p>Score: {score}</p>} {/* Only show score after quiz starts */}
