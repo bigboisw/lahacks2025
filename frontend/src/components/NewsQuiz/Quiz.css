@@ -1,99 +1,105 @@
-/* Quiz.css - Dark Mode Version */
+/* Quiz Container */
 .quiz-container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 25px;
-  background-color: #2d3748; /* Dark slate gray */
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  color: #e2e8f0; /* Light gray text */
+  width: 100%;
+  padding: 2rem; /* Add nice even padding all around */
+  background: #f7f7f7; /* Light soft grey background */
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  color: #111111;
+  animation: fadeIn 0.5s ease;
+  font-family: 'Georgia', 'Times New Roman', serif; /* NYT-style font */
+  box-sizing: border-box; /* Important: padding does not cause overflow */
 }
 
+/* Quiz Question */
 .quiz-question {
-  color: #ffffff;
-  margin-bottom: 25px;
-  font-size: 1.4rem;
-  text-align: center;
-  line-height: 1.5;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #000000;
+  margin-bottom: 2rem;
+  text-align: left;
 }
 
+/* Options Container */
 .options-container {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 1rem;
 }
 
+/* Each Option */
 .option {
   display: flex;
   align-items: center;
-  padding: 18px;
-  background-color: #4a5568; /* Darker gray for options */
-  border: 2px solid #4a5568;
-  border-radius: 10px;
+  padding: 1rem;
+  background-color: #ffffff; /* White options inside grey card */
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
+/* Hover effect */
 .option:hover {
-  background-color: #5a677a;
-  border-color: #718096;
-  transform: translateY(-2px);
+  background-color: #f0f0f0;
 }
 
+/* Selected Option */
 .option.selected {
-  background-color: #3a4a6b;
-  border-color: #646cff;
-  box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.3);
+  background-color: #e0e0e0;
+  border-color: #000000;
 }
 
+/* Option Letter */
 .option-letter {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  margin-right: 18px;
-  background-color: #718096;
-  border-radius: 50%;
   font-weight: bold;
-  color: #ffffff;
-  font-size: 1rem;
+  margin-right: 1rem;
+  font-size: 1.1rem;
+  color: #333333;
 }
 
-.option.selected .option-letter {
-  background-color: #4299e1;
-  color: white;
-}
-
+/* Option Text */
 .option-text {
   flex-grow: 1;
-  font-size: 1.1rem;
-  color: #e2e8f0;
+  font-size: 1.15rem;
+  color: #222222;
+  text-align: left;
 }
 
-/* Add these for correct/incorrect feedback */
+/* Correct/Incorrect Styling */
 .option.correct {
-  background-color: #2f855a;
-  border-color: #38a169;
+  background-color: #d4edda;
+  border-color: #28a745;
 }
 
 .option.incorrect {
-  background-color: #9b2c2c;
-  border-color: #e53e3e;
+  background-color: #f8d7da;
+  border-color: #dc3545;
 }
 
-/* Responsive adjustments */
+/* Fade-in Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
 @media (max-width: 640px) {
   .quiz-container {
-    padding: 20px;
-    margin: 0 15px;
+    padding: 1.5rem;
   }
   
   .quiz-question {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
   }
   
   .option {
-    padding: 15px;
+    padding: 0.8rem;
   }
 }
